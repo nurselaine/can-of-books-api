@@ -36,4 +36,20 @@ app.get('/test', (request, response) => {
 
 })
 
+app.get('/', (request,response) => {
+  response.send(`hello ${PORT}`);
+})
+
+app.get('*', (request, response) => {
+  let errorMessage = `Error 500: Internal Server Error`;
+  response.send(new Error(errorMessage, 500));
+});
+
 app.listen(process.env.PORT, () => console.log(`listening on ${PORT}`));
+
+class Error{
+  constructor(message, code){
+    this.errorMessage = message;
+    this.statusCode = code;
+  }
+}
