@@ -23,6 +23,8 @@ app.get('/books', getBook);
 
 app.post('/books', postBook);
 
+app.delete('/books/:id', deleteObj);
+
 async function getBook(request, response, next) {
 
   try {
@@ -37,9 +39,19 @@ async function postBook(request, response, next) {
   try {
     let createBook = await book.create(request.body);
     response.status(200).send(createBook);
-   
   } catch (error) {
     next(error)
+  }
+}
+
+async function deleteObj(request, response, next){
+  let id = request.params.id;
+  // console.log(id);
+  try {
+    await book.findByIdAndDelete(id);
+    response.status(200).send('item deleted successfully');
+  } catch (error) {
+    next(error);
   }
 }
 
