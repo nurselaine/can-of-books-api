@@ -25,6 +25,8 @@ app.post('/books', postBook);
 
 app.delete('/books/:id', deleteObj);
 
+app.put('/books/:id', putBook);
+
 async function getBook(request, response, next) {
 
   try {
@@ -53,6 +55,17 @@ async function deleteObj(request, response, next){
   } catch (error) {
     next(error);
   }
+}
+
+async function putBook(request, response, next) {
+let id = request.params.id;
+let {title, description, genre} = request.body
+try {
+let updatedBook = await book.findByIdAndUpdate(id,{title, description, genre}, {new: true, overwrite: true});
+response.status(200).send(updatedBook)
+} catch(error) {
+  next(error)
+}
 }
 
 app.get('/test', (request, response) => {
