@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const book = require('./models/book');
 const app = express();
 app.use(cors());
+app.use(express.json());
 
 const PORT = process.env.PORT || 3002;
 mongoose.connect(process.env.DB_URL);
@@ -20,23 +21,35 @@ db.once('open', function () {
 
 app.get('/books', getBook);
 
-async function getBook (request, response, next) {
+app.post('/books', postBook);
 
-  try{
+async function getBook(request, response, next) {
+
+  try {
     let results = await book.find();
     response.status(200).send(results);
-  }catch(err){
+  } catch (err) {
     next(err);
   }
 }
 
+async function postBook(request, response, next) {
+  try {
+    let createBook = await book.create(request.body);
+    response.status(200).send(createBook);
+   
+  } catch (error) {
+    next(error)
+  }
+}
+
 app.get('/test', (request, response) => {
-  
+
   response.send('test request received')
 
 })
 
-app.get('/', (request,response) => {
+app.get('/', (request, response) => {
   response.send(`hello ${PORT}`);
 })
 
@@ -47,8 +60,8 @@ app.get('*', (request, response) => {
 
 app.listen(process.env.PORT, () => console.log(`listening on ${PORT}`));
 
-class Error{
-  constructor(message, code){
+class Error {
+  constructor(message, code) {
     this.errorMessage = message;
     this.statusCode = code;
   }
