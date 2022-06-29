@@ -46,7 +46,7 @@ async function postBook(request, response, next) {
 
 async function deleteObj(request, response, next){
   let id = request.params.id;
-  // console.log(id);
+  console.log(id);
   try {
     await book.findByIdAndDelete(id);
     response.status(200).send('item deleted successfully');
