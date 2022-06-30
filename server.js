@@ -59,12 +59,13 @@ async function deleteObj(request, response, next){
 
 async function putBook(request, response, next) {
 let id = request.params.id;
-let {title, description, genre} = request.body
+let {title, description, genre, __v} = request.body;
 try {
-let updatedBook = await book.findByIdAndUpdate(id,{title, description, genre}, {new: true, overwrite: true});
-response.status(200).send(updatedBook)
+let updatedBook = await book.findByIdAndUpdate(id,{title, description, genre, __v}, {new: true, overwrite: true});
+console.log(updatedBook);
+response.status(200).send(updatedBook);
 } catch(error) {
-  next(error)
+  next(error);
 }
 }
 
